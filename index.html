@@ -1,19 +1,1202 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-    <title>ROHAN'S COLLEGE Attendance Scanner</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rohan's College - Attendance Scanner</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+}
+
+.container {
+  max-width: 520px;
+  margin: auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 5px 25px rgba(0,0,0,.12);
+}
+
+.logo {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 14px;
+}
+
+.college {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.35;
+}
+
+.subtitle,
+.device {
+  text-align: center;
+  margin-top: 8px;
+  color: #666;
+}
+
+.device {
+  font-weight: bold;
+  color: #333;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.verify {
+  background: #198754;
+  color: white;
+}
+
+.start {
+  background: #0d6efd;
+  color: white;
+}
+
+.stop {
+  background: #dc3545;
+  color: white;
+}
+
+#cameraBox {
+  display: none;
+}
+
+#video {
+  width: 100%;
+  border-radius: 15px;
+  background: #000;
+  margin-top: 15px;
+}
+
+.status {
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #eef2f7;
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+.status.error {
+  background: #fdecec;
+  color: #a40000;
+}
+
+.status.success {
+  background: #eaf7ee;
+  color: #146c2e;
+}
+
+.small {
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  margin-top: 12px;
+}
+</style>
 </head>
 
 <body>
 
-<h1>ROHAN'S COLLEGE OF HOTEL MANAGEMENT</h1>
+<div class="container">
 
-<h2>Attendance Scanner</h2>
+  <div class="card">
+    <img
+      class="logo"
+      src="https://drive.google.com/thumbnail?id=1RXMqu0Sa05-Kd1sDvlRnfhjxm8Yun_Av&sz=w400"
+      onerror="this.style.display='none';"
+      alt="College Logo"
+    >
 
-<p>GitHub scanner page is working.</p>
+    <div class="college">
+      ROHAN'S COLLEGE OF HOTEL MANAGEMENT
+    </div>
+
+    <div class="subtitle">
+      Attendance Scanner
+    </div>
+
+    <div class="device">
+      Device:
+      <span id="deviceDisplay"></span>
+    </div>
+  </div>
+
+
+  <div class="card" id="loginBox">
+
+    <label for="pin">
+      Enter 4-Digit Device PIN
+    </label>
+
+    <input
+      id="pin"
+      type="password"
+      inputmode="numeric"
+      maxlength="4"
+      autocomplete="off"
+      placeholder="••••"
+    >
+
+    <button
+      id="verifyButton"
+      type="button"
+      class="verify">
+      VERIFY DEVICE
+    </button>
+
+    <div id="loginStatus" class="status">
+      Enter the device PIN and tap VERIFY DEVICE.
+    </div>
+
+  </div>
+
+
+  <div class="card" id="cameraBox">
+
+    <div id="cameraStatus" class="status">
+      Device verified.
+      Tap START CAMERA.
+    </div>
+
+    <button
+      id="startButton"
+      type="button"
+      class="start">
+      START CAMERA
+    </button>
+
+    <button
+      id="stopButton"
+      type="button"
+      class="stop">
+      STOP CAMERA
+    </button>
+
+    <video
+      id="video"
+      autoplay
+      muted
+      playsinline>
+    </video>
+
+  </div>
+
+
+  <div class="small">
+    Scan the student's QR code to record attendance.
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIGURATION
+   ===================================================== */
+
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycby2pf7qFW8MOVmWywwzQCCPBbtard_svdIpWj0xrA-52YtbREC95k_qZaghUMEfjT304Q/exec";
+
+
+/*
+ * Device ID is taken from:
+ *
+ * GitHub Pages URL:
+ * https://YOUR-USERNAME.github.io/attendance-scanner/?device=SCAN001
+ *
+ * If no device is supplied, SCAN001 is used.
+ */
+
+const urlParams = new URLSearchParams(window.location.search);
+
+const deviceId =
+  String(urlParams.get("device") || "SCAN001")
+    .trim()
+    .toUpperCase();
+
+
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+
+let sessionToken = "";
+let stream = null;
+let scanning = false;
+let detector = null;
+let lastScannedId = "";
+let lastScanTime = 0;
+let jsonpCounter = 0;
+
+
+/* =====================================================
+   INITIAL DISPLAY
+   ===================================================== */
+
+document.getElementById("deviceDisplay").textContent =
+  deviceId;
+
+
+/* =====================================================
+   STATUS FUNCTIONS
+   ===================================================== */
+
+function showStatus(message, isError, isSuccess) {
+
+  const box =
+    document.getElementById("loginStatus");
+
+  box.textContent = message;
+
+  box.className =
+    "status" +
+    (isError ? " error" : "") +
+    (isSuccess ? " success" : "");
+}
+
+
+function showCameraStatus(message, isError, isSuccess) {
+
+  const box =
+    document.getElementById("cameraStatus");
+
+  box.textContent = message;
+
+  box.className =
+    "status" +
+    (isError ? " error" : "") +
+    (isSuccess ? " success" : "");
+}
+
+
+/* =====================================================
+   JSONP API CALL
+   ===================================================== */
+
+function callAppsScriptApi(params) {
+
+  return new Promise(function(resolve, reject) {
+
+    const callbackName =
+      "attendanceCallback_" +
+      Date.now() +
+      "_" +
+      (++jsonpCounter);
+
+    const script =
+      document.createElement("script");
+
+    const query =
+      new URLSearchParams(params);
+
+    query.set("callback", callbackName);
+
+    window[callbackName] = function(response) {
+
+      cleanup();
+
+      resolve(response);
+    };
+
+    script.onerror = function() {
+
+      cleanup();
+
+      reject(
+        new Error(
+          "Unable to connect to attendance server."
+        )
+      );
+    };
+
+    function cleanup() {
+
+      try {
+        delete window[callbackName];
+      } catch (e) {
+        window[callbackName] = undefined;
+      }
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    }
+
+    script.src =
+      APPS_SCRIPT_URL +
+      "?" +
+      query.toString();
+
+    document.body.appendChild(script);
+
+  });
+}
+
+
+/* =====================================================
+   VERIFY DEVICE
+   ===================================================== */
+
+async function verifyScannerDevice() {
+
+  const verifyButton =
+    document.getElementById("verifyButton");
+
+  const pinInput =
+    document.getElementById("pin");
+
+  const pin =
+    String(pinInput.value || "").trim();
+
+
+  showStatus(
+    "Verify button clicked. Checking PIN...",
+    false,
+    false
+  );
+
+
+  if (!deviceId) {
+
+    showStatus(
+      "Device ID is missing.",
+      true,
+      false
+    );
+
+    return;
+  }
+
+
+  if (
+    pin.length !== 4 ||
+    !/^\d{4}$/.test(pin)
+  ) {
+
+    showStatus(
+      "Please enter exactly 4 digits.",
+      true,
+      false
+    );
+
+    pinInput.focus();
+
+    return;
+  }
+
+
+  verifyButton.disabled = true;
+
+  verifyButton.textContent =
+    "VERIFYING...";
+
+
+  showStatus(
+    "Contacting attendance server...\nPlease wait.",
+    false,
+    false
+  );
+
+
+  try {
+
+    const response =
+      await callAppsScriptApi({
+
+        api: "verify",
+
+        device: deviceId,
+
+        pin: pin
+
+      });
+
+
+    console.log(
+      "VERIFY RESPONSE:",
+      response
+    );
+
+
+    if (
+      response &&
+      response.success === true
+    ) {
+
+      sessionToken =
+        response.token || "";
+
+
+      if (!sessionToken) {
+
+        throw new Error(
+          "Server verified the device but did not return a session token."
+        );
+      }
+
+
+      document
+        .getElementById("loginBox")
+        .style.display = "none";
+
+
+      document
+        .getElementById("cameraBox")
+        .style.display = "block";
+
+
+      showCameraStatus(
+
+        "DEVICE VERIFIED SUCCESSFULLY.\n\n" +
+
+        "Device: " +
+
+        (
+          response.deviceName ||
+          deviceId
+        ) +
+
+        "\n\n" +
+
+        "Tap START CAMERA.",
+
+        false,
+
+        true
+
+      );
+
+    } else {
+
+      showStatus(
+
+        response &&
+        response.message
+          ? response.message
+          : "Device verification failed.",
+
+        true,
+
+        false
+
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "VERIFY ERROR:",
+      error
+    );
+
+    showStatus(
+
+      "Server connection error.\n\n" +
+
+      (
+        error &&
+        error.message
+          ? error.message
+          : "Unable to contact attendance server."
+      ),
+
+      true,
+
+      false
+
+    );
+
+  } finally {
+
+    verifyButton.disabled = false;
+
+    verifyButton.textContent =
+      "VERIFY DEVICE";
+  }
+}
+
+
+/* =====================================================
+   ENTER KEY
+   ===================================================== */
+
+document
+  .getElementById("pin")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+        verifyScannerDevice();
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   VERIFY BUTTON
+   ===================================================== */
+
+document
+  .getElementById("verifyButton")
+  .addEventListener(
+    "click",
+    verifyScannerDevice
+  );
+
+
+/* =====================================================
+   START CAMERA
+   ===================================================== */
+
+async function startCamera() {
+
+  if (!sessionToken) {
+
+    showCameraStatus(
+      "Device is not verified.\n\nPlease verify the device first.",
+      true,
+      false
+    );
+
+    return;
+  }
+
+
+  if (
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ) {
+
+    showCameraStatus(
+      "Camera is not available in this browser.\n\nPlease use the latest Google Chrome.",
+      true,
+      false
+    );
+
+    return;
+  }
+
+
+  if (
+    !window.isSecureContext
+  ) {
+
+    showCameraStatus(
+      "Camera requires a secure HTTPS page.\n\nPlease open the GitHub Pages HTTPS URL.",
+      true,
+      false
+    );
+
+    return;
+  }
+
+
+  if (
+    !("BarcodeDetector" in window)
+  ) {
+
+    showCameraStatus(
+      "QR scanning is not supported in this browser.\n\nPlease use the latest Google Chrome on Android.",
+      true,
+      false
+    );
+
+    return;
+  }
+
+
+  stopCamera(false);
+
+
+  try {
+
+    detector =
+      new BarcodeDetector({
+        formats: ["qr_code"]
+      });
+
+
+    showCameraStatus(
+      "Requesting camera permission...\n\nPlease tap ALLOW if Chrome asks.",
+      false,
+      false
+    );
+
+
+    stream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video: {
+
+          facingMode: {
+            ideal: "environment"
+          },
+
+          width: {
+            ideal: 1280
+          },
+
+          height: {
+            ideal: 720
+          }
+
+        },
+
+        audio: false
+
+      });
+
+
+    const video =
+      document.getElementById("video");
+
+
+    video.srcObject =
+      stream;
+
+
+    await video.play();
+
+
+    scanning = true;
+
+
+    showCameraStatus(
+      "CAMERA ACTIVE.\n\nPoint the rear camera at the student's QR code.",
+      false,
+      true
+    );
+
+
+    scanLoop();
+
+
+  } catch (error) {
+
+    console.error(
+      "CAMERA ERROR:",
+      error
+    );
+
+
+    stopCamera(false);
+
+
+    const errorName =
+      error && error.name
+        ? error.name
+        : "";
+
+
+    if (
+      errorName === "NotAllowedError" ||
+      errorName === "PermissionDeniedError"
+    ) {
+
+      showCameraStatus(
+        "CAMERA PERMISSION DENIED.\n\nPlease allow Camera permission for this GitHub Pages website in Chrome, then reload the page and try again.",
+        true,
+        false
+      );
+
+      return;
+    }
+
+
+    if (
+      errorName === "NotFoundError"
+    ) {
+
+      showCameraStatus(
+        "NO CAMERA FOUND.\n\nPlease check the phone camera.",
+        true,
+        false
+      );
+
+      return;
+    }
+
+
+    if (
+      errorName === "NotReadableError"
+    ) {
+
+      showCameraStatus(
+        "CAMERA IS ALREADY IN USE.\n\nClose other apps using the camera and try again.",
+        true,
+        false
+      );
+
+      return;
+    }
+
+
+    showCameraStatus(
+
+      "UNABLE TO START CAMERA.\n\n" +
+
+      "Error: " +
+
+      (
+        errorName ||
+        "Unknown camera error"
+      ) +
+
+      "\n\n" +
+
+      (
+        error && error.message
+          ? error.message
+          : ""
+      ),
+
+      true,
+
+      false
+
+    );
+
+  }
+}
+
+
+/* =====================================================
+   STOP CAMERA
+   ===================================================== */
+
+function stopCamera(showMessage) {
+
+  scanning = false;
+
+
+  if (stream) {
+
+    stream
+      .getTracks()
+      .forEach(function(track) {
+
+        track.stop();
+
+      });
+
+    stream = null;
+  }
+
+
+  const video =
+    document.getElementById("video");
+
+
+  if (video) {
+    video.srcObject = null;
+  }
+
+
+  if (showMessage !== false) {
+
+    showCameraStatus(
+      "Camera stopped.",
+      false,
+      false
+    );
+
+  }
+}
+
+
+/* =====================================================
+   START BUTTON
+   ===================================================== */
+
+document
+  .getElementById("startButton")
+  .addEventListener(
+    "click",
+    startCamera
+  );
+
+
+/* =====================================================
+   STOP BUTTON
+   ===================================================== */
+
+document
+  .getElementById("stopButton")
+  .addEventListener(
+    "click",
+    function() {
+      stopCamera(true);
+    }
+  );
+
+
+/* =====================================================
+   QR SCAN LOOP
+   ===================================================== */
+
+async function scanLoop() {
+
+  if (!scanning) {
+    return;
+  }
+
+
+  const video =
+    document.getElementById("video");
+
+
+  if (
+    video.readyState >= 2 &&
+    detector
+  ) {
+
+    try {
+
+      const barcodes =
+        await detector.detect(video);
+
+
+      if (
+        barcodes &&
+        barcodes.length > 0
+      ) {
+
+        const rawValue =
+          barcodes[0].rawValue;
+
+
+        if (rawValue) {
+
+          processQr(rawValue);
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "QR DETECTION ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
+  if (scanning) {
+
+    requestAnimationFrame(
+      scanLoop
+    );
+
+  }
+}
+
+
+/* =====================================================
+   PROCESS QR
+   ===================================================== */
+
+function processQr(rawValue) {
+
+  const now =
+    Date.now();
+
+
+  /*
+   * Prevent the same QR from being
+   * processed repeatedly within 3 seconds.
+   */
+
+  if (
+    rawValue === lastScannedId &&
+    now - lastScanTime < 3000
+  ) {
+
+    return;
+  }
+
+
+  lastScannedId =
+    rawValue;
+
+  lastScanTime =
+    now;
+
+
+  const studentId =
+    extractStudentId(rawValue);
+
+
+  if (!studentId) {
+
+    showCameraStatus(
+      "INVALID QR CODE.\n\nThis QR does not contain a valid Student ID.",
+      true,
+      false
+    );
+
+    return;
+  }
+
+
+  showCameraStatus(
+
+    "QR DETECTED.\n\n" +
+
+    "Student ID: " +
+
+    studentId +
+
+    "\n\nRecording attendance...",
+
+    false,
+
+    false
+
+  );
+
+
+  recordAttendance(studentId);
+}
+
+
+/* =====================================================
+   RECORD ATTENDANCE
+   ===================================================== */
+
+async function recordAttendance(studentId) {
+
+  if (!sessionToken) {
+
+    showCameraStatus(
+      "Scanner session is missing.\n\nPlease verify the device again.",
+      true,
+      false
+    );
+
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await callAppsScriptApi({
+
+        api: "record",
+
+        student: studentId,
+
+        token: sessionToken
+
+      });
+
+
+    console.log(
+      "ATTENDANCE RESPONSE:",
+      response
+    );
+
+
+    if (
+      response &&
+      response.success
+    ) {
+
+      showCameraStatus(
+
+        response.message ||
+        "Attendance recorded successfully.",
+
+        false,
+
+        true
+
+      );
+
+    } else {
+
+      showCameraStatus(
+
+        response &&
+        response.message
+          ? response.message
+          : "Attendance could not be recorded.",
+
+        true,
+
+        false
+
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "ATTENDANCE ERROR:",
+      error
+    );
+
+
+    showCameraStatus(
+
+      "Attendance server error.\n\n" +
+
+      (
+        error &&
+        error.message
+          ? error.message
+          : "Unable to contact attendance server."
+      ),
+
+      true,
+
+      false
+
+    );
+
+  }
+}
+
+
+/* =====================================================
+   EXTRACT STUDENT ID
+   ===================================================== */
+
+function extractStudentId(rawValue) {
+
+  const value =
+    String(rawValue || "").trim();
+
+
+  /*
+   * CASE 1:
+   * QR contains the full existing
+   * Student Profile URL.
+   */
+
+  try {
+
+    const url =
+      new URL(value);
+
+
+    const id =
+      url.searchParams.get("id");
+
+
+    if (id) {
+
+      return id
+        .trim()
+        .toUpperCase();
+
+    }
+
+  } catch (error) {
+
+    /*
+     * Not a URL.
+     * Continue below.
+     */
+
+  }
+
+
+  /*
+   * CASE 2:
+   * Find RC######## anywhere.
+   */
+
+  const match =
+    value.match(
+      /RC\d{8}/i
+    );
+
+
+  if (match) {
+
+    return match[0]
+      .toUpperCase();
+
+  }
+
+
+  /*
+   * CASE 3:
+   * Plain Student ID.
+   */
+
+  if (
+    /^RC\d{8}$/i.test(value)
+  ) {
+
+    return value
+      .toUpperCase();
+
+  }
+
+
+  return "";
+}
+
+</script>
 
 </body>
-
 </html>
