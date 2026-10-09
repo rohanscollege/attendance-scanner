@@ -1,159 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rohan's College - Attendance Scanner</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
+
+<title>
+Rohan's College - Attendance Scanner
+</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
 
 body {
+
   margin: 0;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
+
+  padding: 12px;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef3f8,
+      #f8fafc
+    );
+
+  color: #1f2937;
+
 }
 
 .container {
-  max-width: 520px;
+
+  max-width: 560px;
+
   margin: auto;
+
 }
 
 .card {
-  background: #fff;
+
+  background: white;
+
   border-radius: 20px;
-  padding: 22px;
-  margin-bottom: 18px;
-  box-shadow: 0 5px 25px rgba(0,0,0,.12);
+
+  padding: 18px;
+
+  margin-bottom: 14px;
+
+  box-shadow:
+    0 6px 25px
+    rgba(0,0,0,.10);
+
 }
 
 .logo {
-  width: 130px;
-  height: 130px;
+
+  width: 115px;
+
+  height: 115px;
+
   border-radius: 50%;
+
   object-fit: cover;
+
   display: block;
-  margin: 0 auto 14px;
+
+  margin: 0 auto 12px;
+
+  border: 4px solid white;
+
+  box-shadow:
+    0 4px 14px
+    rgba(0,0,0,.20);
+
 }
 
 .college {
+
   text-align: center;
+
   font-size: 20px;
+
   font-weight: bold;
+
   line-height: 1.35;
+
 }
 
-.subtitle,
-.device {
+.subtitle {
+
   text-align: center;
-  margin-top: 8px;
+
+  margin-top: 6px;
+
   color: #666;
+
+  font-size: 13px;
+
 }
 
 .device {
+
+  text-align: center;
+
+  margin-top: 7px;
+
   font-weight: bold;
-  color: #333;
+
 }
 
 label {
+
   display: block;
+
   font-weight: bold;
-  margin-bottom: 8px;
+
+  margin-bottom: 7px;
+
 }
 
 input {
+
   width: 100%;
-  padding: 14px;
-  border: 1px solid #ccc;
+
+  padding: 13px;
+
+  border:
+    1px solid #ccc;
+
   border-radius: 10px;
-  font-size: 20px;
+
+  font-size: 19px;
+
   text-align: center;
-  letter-spacing: 5px;
+
+  letter-spacing: 4px;
+
 }
 
 button {
+
   width: 100%;
-  padding: 14px;
+
+  padding: 13px;
+
   border: none;
+
   border-radius: 10px;
-  font-size: 17px;
+
+  font-size: 16px;
+
   font-weight: bold;
+
   cursor: pointer;
-  margin-top: 12px;
+
+  margin-top: 10px;
+
 }
 
 button:disabled {
+
   opacity: .55;
-  cursor: not-allowed;
+
 }
 
 .verify {
+
   background: #198754;
+
   color: white;
+
 }
 
 .start {
+
   background: #0d6efd;
+
   color: white;
+
 }
 
 .stop {
+
   background: #dc3545;
+
   color: white;
+
 }
 
 #cameraBox {
+
   display: none;
+
 }
 
 #video {
+
   width: 100%;
-  border-radius: 15px;
+
+  border-radius: 16px;
+
   background: #000;
-  margin-top: 15px;
+
+  margin-top: 12px;
+
 }
 
 .status {
-  margin-top: 15px;
-  padding: 14px;
+
+  margin-top: 12px;
+
+  padding: 13px;
+
   border-radius: 10px;
+
   background: #eef2f7;
+
   white-space: pre-line;
-  line-height: 1.5;
+
+  line-height: 1.45;
+
 }
 
 .status.error {
+
   background: #fdecec;
+
   color: #a40000;
+
 }
 
 .status.success {
+
   background: #eaf7ee;
+
   color: #146c2e;
+
+}
+
+.scan-count {
+
+  text-align: center;
+
+  font-weight: bold;
+
+  margin-top: 10px;
+
+}
+
+.student-card {
+
+  display: none;
+
+}
+
+.student-header {
+
+  text-align: center;
+
+  border-bottom:
+    1px solid #eee;
+
+  padding-bottom: 12px;
+
+  margin-bottom: 10px;
+
+}
+
+.student-name {
+
+  font-size: 23px;
+
+  font-weight: bold;
+
+}
+
+.student-id {
+
+  margin-top: 4px;
+
+  color: #666;
+
+  font-size: 13px;
+
+}
+
+.details {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 9px;
+
+}
+
+.detail {
+
+  background: #f6f8fa;
+
+  border-radius: 10px;
+
+  padding: 10px;
+
+}
+
+.detail-label {
+
+  font-size: 11px;
+
+  color: #777;
+
+}
+
+.detail-value {
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  margin-top: 3px;
+
+  word-break: break-word;
+
+}
+
+.attendance-result {
+
+  margin-top: 14px;
+
+  padding: 15px;
+
+  border-radius: 14px;
+
+  background: #eef5ff;
+
+  text-align: center;
+
+}
+
+.action {
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+}
+
+.result-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap: 8px;
+
+  margin-top: 10px;
+
+}
+
+.result-item {
+
+  background: white;
+
+  border-radius: 9px;
+
+  padding: 9px;
+
+}
+
+.result-label {
+
+  font-size: 10px;
+
+  color: #777;
+
+}
+
+.result-value {
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  margin-top: 3px;
+
+}
+
+.ready {
+
+  text-align: center;
+
+  color: #198754;
+
+  font-weight: bold;
+
+  margin-top: 10px;
+
 }
 
 .small {
+
   text-align: center;
+
   color: #777;
-  font-size: 13px;
-  margin-top: 12px;
+
+  font-size: 12px;
+
+  margin: 12px 0;
+
 }
+
+@media(max-width:450px) {
+
+  .details {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+  .college {
+
+    font-size: 18px;
+
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
+
+  <!-- HEADER -->
+
   <div class="card">
+
     <img
       class="logo"
       src="https://drive.google.com/thumbnail?id=1RXMqu0Sa05-Kd1sDvlRnfhjxm8Yun_Av&sz=w400"
-      onerror="this.style.display='none';"
       alt="College Logo"
+      onerror="this.style.display='none';"
     >
 
     <div class="college">
@@ -161,19 +470,22 @@ button:disabled {
     </div>
 
     <div class="subtitle">
-      Attendance Scanner
+      Fast Attendance Scanner
     </div>
 
     <div class="device">
       Device:
       <span id="deviceDisplay"></span>
     </div>
+
   </div>
 
 
+  <!-- LOGIN -->
+
   <div class="card" id="loginBox">
 
-    <label for="pin">
+    <label>
       Enter 4-Digit Device PIN
     </label>
 
@@ -188,36 +500,47 @@ button:disabled {
 
     <button
       id="verifyButton"
-      type="button"
-      class="verify">
+      class="verify"
+    >
       VERIFY DEVICE
     </button>
 
-    <div id="loginStatus" class="status">
+    <div
+      id="loginStatus"
+      class="status"
+    >
       Enter the device PIN and tap VERIFY DEVICE.
     </div>
 
   </div>
 
 
-  <div class="card" id="cameraBox">
+  <!-- CAMERA -->
 
-    <div id="cameraStatus" class="status">
+  <div
+    class="card"
+    id="cameraBox"
+  >
+
+    <div
+      id="cameraStatus"
+      class="status success"
+    >
       Device verified.
-      Tap START CAMERA.
+      Start the camera.
     </div>
 
     <button
       id="startButton"
-      type="button"
-      class="start">
+      class="start"
+    >
       START CAMERA
     </button>
 
     <button
       id="stopButton"
-      type="button"
-      class="stop">
+      class="stop"
+    >
       STOP CAMERA
     </button>
 
@@ -225,222 +548,510 @@ button:disabled {
       id="video"
       autoplay
       muted
-      playsinline>
-    </video>
+      playsinline
+    ></video>
+
+    <div
+      id="scanCount"
+      class="scan-count"
+    >
+      Scanned: 0
+    </div>
+
+  </div>
+
+
+  <!-- STUDENT RESULT -->
+
+  <div
+    class="card student-card"
+    id="studentCard"
+  >
+
+    <div class="student-header">
+
+      <div
+        class="student-name"
+        id="studentName"
+      >
+      </div>
+
+      <div
+        class="student-id"
+        id="studentId"
+      >
+      </div>
+
+    </div>
+
+
+    <div
+      class="details"
+      id="studentDetails"
+    >
+    </div>
+
+
+    <div
+      class="attendance-result"
+    >
+
+      <div
+        class="action"
+        id="attendanceAction"
+      >
+      </div>
+
+      <div
+        class="result-grid"
+      >
+
+        <div class="result-item">
+
+          <div class="result-label">
+            Date
+          </div>
+
+          <div
+            class="result-value"
+            id="resultDate"
+          >
+          </div>
+
+        </div>
+
+
+        <div class="result-item">
+
+          <div class="result-label">
+            IN
+          </div>
+
+          <div
+            class="result-value"
+            id="resultIn"
+          >
+          </div>
+
+        </div>
+
+
+        <div class="result-item">
+
+          <div class="result-label">
+            OUT
+          </div>
+
+          <div
+            class="result-value"
+            id="resultOut"
+          >
+          </div>
+
+        </div>
+
+
+        <div class="result-item">
+
+          <div class="result-label">
+            Duration
+          </div>
+
+          <div
+            class="result-value"
+            id="resultDuration"
+          >
+          </div>
+
+        </div>
+
+
+        <div class="result-item">
+
+          <div class="result-label">
+            Status
+          </div>
+
+          <div
+            class="result-value"
+            id="resultStatus"
+          >
+          </div>
+
+        </div>
+
+
+        <div class="result-item">
+
+          <div class="result-label">
+            Late
+          </div>
+
+          <div
+            class="result-value"
+            id="resultLate"
+          >
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="ready">
+      ✓ Ready for next student
+    </div>
 
   </div>
 
 
   <div class="small">
-    Scan the student's QR code to record attendance.
+    Keep the camera running and move each student's QR code in front of the camera.
   </div>
+
 
 </div>
 
 
 <script>
 
-/* =====================================================
-   CONFIGURATION
-   ===================================================== */
+
+/*******************************************************
+ * CONFIGURATION
+ *******************************************************/
 
 const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzvzlkVSOaaFotUUKmViFxcAg7k0Vw2M1xiUhb-3d92-w7vIRp6o5IlHArpxkhO-rmpfw/exec";
-  
-/*
- * Device ID is taken from:
- *
- * GitHub Pages URL:
- * https://YOUR-USERNAME.github.io/attendance-scanner/?device=SCAN001
- *
- * If no device is supplied, SCAN001 is used.
- */
-
-const urlParams = new URLSearchParams(window.location.search);
-
-const deviceId =
-  String(urlParams.get("device") || "SCAN001")
-    .trim()
-    .toUpperCase();
+  "https://script.google.com/macros/s/AKfycby2pf7qFW8MOVmWywwzQCCPBbtard_svdIpWj0xrA-52YtbREC95k_qZaghUMEfjT304Q/exec";
 
 
-/* =====================================================
-   VARIABLES
-   ===================================================== */
-
-let sessionToken = "";
-let stream = null;
-let scanning = false;
-let detector = null;
-let lastScannedId = "";
-let lastScanTime = 0;
-let jsonpCounter = 0;
-
-
-/* =====================================================
-   INITIAL DISPLAY
-   ===================================================== */
-
-document.getElementById("deviceDisplay").textContent =
-  deviceId;
-
-
-/* =====================================================
-   STATUS FUNCTIONS
-   ===================================================== */
-
-function showStatus(message, isError, isSuccess) {
-
-  const box =
-    document.getElementById("loginStatus");
-
-  box.textContent = message;
-
-  box.className =
-    "status" +
-    (isError ? " error" : "") +
-    (isSuccess ? " success" : "");
-}
-
-
-function showCameraStatus(message, isError, isSuccess) {
-
-  const box =
-    document.getElementById("cameraStatus");
-
-  box.textContent = message;
-
-  box.className =
-    "status" +
-    (isError ? " error" : "") +
-    (isSuccess ? " success" : "");
-}
-
-
-/* =====================================================
-   JSONP API CALL
-   ===================================================== */
-
-function callAppsScriptApi(params) {
-
-  return new Promise(function(resolve, reject) {
-
-    const callbackName =
-      "attendanceCallback_" +
-      Date.now() +
-      "_" +
-      (++jsonpCounter);
-
-    const script =
-      document.createElement("script");
-
-    const query =
-      new URLSearchParams(params);
-
-    query.set("callback", callbackName);
-
-    window[callbackName] = function(response) {
-
-      cleanup();
-
-      resolve(response);
-    };
-
-    script.onerror = function() {
-
-      cleanup();
-
-      reject(
-        new Error(
-          "Unable to connect to attendance server."
-        )
-      );
-    };
-
-    function cleanup() {
-
-      try {
-        delete window[callbackName];
-      } catch (e) {
-        window[callbackName] = undefined;
-      }
-
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    }
-
-    script.src =
-      APPS_SCRIPT_URL +
-      "?" +
-      query.toString();
-
-    document.body.appendChild(script);
-
-  });
-}
-
-
-/* =====================================================
-   VERIFY DEVICE
-   ===================================================== */
-
-async function verifyScannerDevice() {
-
-  const verifyButton =
-    document.getElementById("verifyButton");
-
-  const pinInput =
-    document.getElementById("pin");
-
-  const pin =
-    String(pinInput.value || "").trim();
-
-
-  showStatus(
-    "Verify button clicked. Checking PIN...",
-    false,
-    false
+const urlParams =
+  new URLSearchParams(
+    window.location.search
   );
 
 
-  if (!deviceId) {
+const deviceId =
+  String(
+    urlParams.get("device") ||
+    "SCAN001"
+  )
+  .trim()
+  .toUpperCase();
 
-    showStatus(
-      "Device ID is missing.",
-      true,
-      false
+
+/*******************************************************
+ * VARIABLES
+ *******************************************************/
+
+let sessionToken = "";
+
+let stream = null;
+
+let scanning = false;
+
+let detector = null;
+
+let detecting = false;
+
+let jsonpCounter = 0;
+
+let scanCount = 0;
+
+let processingStudents =
+  new Set();
+
+let recentScans =
+  new Map();
+
+
+/*******************************************************
+ * INITIAL DISPLAY
+ *******************************************************/
+
+document
+  .getElementById(
+    "deviceDisplay"
+  )
+  .textContent =
+    deviceId;
+
+
+/*******************************************************
+ * STATUS
+ *******************************************************/
+
+function showLoginStatus(
+  message,
+  error,
+  success
+) {
+
+  const box =
+    document.getElementById(
+      "loginStatus"
     );
 
-    return;
-  }
+
+  box.textContent =
+    message;
+
+
+  box.className =
+    "status" +
+
+    (
+      error
+        ? " error"
+        : ""
+    ) +
+
+    (
+      success
+        ? " success"
+        : ""
+    );
+
+}
+
+
+function showCameraStatus(
+  message,
+  error,
+  success
+) {
+
+  const box =
+    document.getElementById(
+      "cameraStatus"
+    );
+
+
+  box.textContent =
+    message;
+
+
+  box.className =
+    "status" +
+
+    (
+      error
+        ? " error"
+        : ""
+    ) +
+
+    (
+      success
+        ? " success"
+        : ""
+    );
+
+}
+
+
+/*******************************************************
+ * JSONP API
+ *******************************************************/
+
+function callAppsScriptApi(
+  params
+) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const callbackName =
+        "attendanceCallback_" +
+        Date.now() +
+        "_" +
+        (++jsonpCounter);
+
+
+      const script =
+        document.createElement(
+          "script"
+        );
+
+
+      const query =
+        new URLSearchParams(
+          params
+        );
+
+
+      query.set(
+        "callback",
+        callbackName
+      );
+
+
+      let finished =
+        false;
+
+
+      const timeout =
+        setTimeout(
+          function() {
+
+            if (finished) {
+              return;
+            }
+
+            finished = true;
+
+            cleanup();
+
+            reject(
+              new Error(
+                "Attendance server timed out."
+              )
+            );
+
+          },
+          12000
+        );
+
+
+      window[callbackName] =
+        function(response) {
+
+          if (finished) {
+            return;
+          }
+
+          finished = true;
+
+          clearTimeout(
+            timeout
+          );
+
+          cleanup();
+
+          resolve(
+            response
+          );
+
+        };
+
+
+      script.onerror =
+        function() {
+
+          if (finished) {
+            return;
+          }
+
+          finished = true;
+
+          clearTimeout(
+            timeout
+          );
+
+          cleanup();
+
+          reject(
+            new Error(
+              "Unable to connect to attendance server."
+            )
+          );
+
+        };
+
+
+      function cleanup() {
+
+        try {
+
+          delete window[
+            callbackName
+          ];
+
+        } catch (e) {
+
+          window[
+            callbackName
+          ] = undefined;
+
+        }
+
+
+        if (
+          script.parentNode
+        ) {
+
+          script.parentNode
+            .removeChild(
+              script
+            );
+
+        }
+
+      }
+
+
+      script.src =
+        APPS_SCRIPT_URL +
+        "?" +
+        query.toString();
+
+
+      document.body
+        .appendChild(
+          script
+        );
+
+    }
+  );
+
+}
+
+
+/*******************************************************
+ * VERIFY DEVICE
+ *******************************************************/
+
+async function verifyScannerDevice() {
+
+  const button =
+    document.getElementById(
+      "verifyButton"
+    );
+
+
+  const pin =
+    String(
+      document.getElementById(
+        "pin"
+      ).value || ""
+    ).trim();
 
 
   if (
-    pin.length !== 4 ||
     !/^\d{4}$/.test(pin)
   ) {
 
-    showStatus(
+    showLoginStatus(
       "Please enter exactly 4 digits.",
       true,
       false
     );
 
-    pinInput.focus();
-
     return;
+
   }
 
 
-  verifyButton.disabled = true;
+  button.disabled =
+    true;
 
-  verifyButton.textContent =
+
+  button.textContent =
     "VERIFYING...";
 
 
-  showStatus(
-    "Contacting attendance server...\nPlease wait.",
+  showLoginStatus(
+    "Connecting to attendance server...",
     false,
     false
   );
@@ -460,68 +1071,46 @@ async function verifyScannerDevice() {
       });
 
 
-    console.log(
-      "VERIFY RESPONSE:",
-      response
-    );
-
-
     if (
       response &&
-      response.success === true
+      response.success
     ) {
 
       sessionToken =
-        response.token || "";
-
-
-      if (!sessionToken) {
-
-        throw new Error(
-          "Server verified the device but did not return a session token."
-        );
-      }
+        response.token;
 
 
       document
-        .getElementById("loginBox")
-        .style.display = "none";
+        .getElementById(
+          "loginBox"
+        )
+        .style.display =
+          "none";
 
 
       document
-        .getElementById("cameraBox")
-        .style.display = "block";
+        .getElementById(
+          "cameraBox"
+        )
+        .style.display =
+          "block";
 
 
       showCameraStatus(
-
-        "DEVICE VERIFIED SUCCESSFULLY.\n\n" +
-
-        "Device: " +
-
-        (
-          response.deviceName ||
-          deviceId
-        ) +
-
-        "\n\n" +
-
-        "Tap START CAMERA.",
-
+        "DEVICE VERIFIED.\n\nTap START CAMERA.",
         false,
-
         true
-
       );
+
 
     } else {
 
-      showStatus(
+      showLoginStatus(
 
         response &&
         response.message
           ? response.message
-          : "Device verification failed.",
+          : "Verification failed.",
 
         true,
 
@@ -531,23 +1120,13 @@ async function verifyScannerDevice() {
 
     }
 
+
   } catch (error) {
 
-    console.error(
-      "VERIFY ERROR:",
-      error
-    );
-
-    showStatus(
+    showLoginStatus(
 
       "Server connection error.\n\n" +
-
-      (
-        error &&
-        error.message
-          ? error.message
-          : "Unable to contact attendance server."
-      ),
+      error.message,
 
       true,
 
@@ -555,19 +1134,22 @@ async function verifyScannerDevice() {
 
     );
 
-  } finally {
-
-    verifyButton.disabled = false;
-
-    verifyButton.textContent =
-      "VERIFY DEVICE";
   }
+
+
+  button.disabled =
+    false;
+
+
+  button.textContent =
+    "VERIFY DEVICE";
+
 }
 
 
-/* =====================================================
-   ENTER KEY
-   ===================================================== */
+/*******************************************************
+ * ENTER PIN
+ *******************************************************/
 
 document
   .getElementById("pin")
@@ -575,41 +1157,38 @@ document
     "keydown",
     function(event) {
 
-      if (event.key === "Enter") {
+      if (
+        event.key === "Enter"
+      ) {
+
         verifyScannerDevice();
+
       }
 
     }
   );
 
 
-/* =====================================================
-   VERIFY BUTTON
-   ===================================================== */
-
 document
-  .getElementById("verifyButton")
+  .getElementById(
+    "verifyButton"
+  )
   .addEventListener(
     "click",
     verifyScannerDevice
   );
 
 
-/* =====================================================
-   START CAMERA
-   ===================================================== */
+/*******************************************************
+ * START CAMERA
+ *******************************************************/
 
 async function startCamera() {
 
   if (!sessionToken) {
 
-    showCameraStatus(
-      "Device is not verified.\n\nPlease verify the device first.",
-      true,
-      false
-    );
-
     return;
+
   }
 
 
@@ -619,12 +1198,13 @@ async function startCamera() {
   ) {
 
     showCameraStatus(
-      "Camera is not available in this browser.\n\nPlease use the latest Google Chrome.",
+      "Camera is not supported in this browser.",
       true,
       false
     );
 
     return;
+
   }
 
 
@@ -633,12 +1213,13 @@ async function startCamera() {
   ) {
 
     showCameraStatus(
-      "Camera requires a secure HTTPS page.\n\nPlease open the GitHub Pages HTTPS URL.",
+      "Please use the HTTPS GitHub Pages URL.",
       true,
       false
     );
 
     return;
+
   }
 
 
@@ -647,12 +1228,13 @@ async function startCamera() {
   ) {
 
     showCameraStatus(
-      "QR scanning is not supported in this browser.\n\nPlease use the latest Google Chrome on Android.",
+      "QR scanning requires a recent Chrome browser.",
       true,
       false
     );
 
     return;
+
   }
 
 
@@ -663,43 +1245,55 @@ async function startCamera() {
 
     detector =
       new BarcodeDetector({
-        formats: ["qr_code"]
+
+        formats: [
+          "qr_code"
+        ]
+
       });
 
 
     showCameraStatus(
-      "Requesting camera permission...\n\nPlease tap ALLOW if Chrome asks.",
+      "Starting camera...",
       false,
       false
     );
 
 
     stream =
-      await navigator.mediaDevices.getUserMedia({
+      await navigator.mediaDevices
+        .getUserMedia({
 
-        video: {
+          video: {
 
-          facingMode: {
-            ideal: "environment"
+            facingMode: {
+              ideal: "environment"
+            },
+
+            /*
+             * Lower resolution gives
+             * faster QR detection.
+             */
+
+            width: {
+              ideal: 640
+            },
+
+            height: {
+              ideal: 480
+            }
+
           },
 
-          width: {
-            ideal: 1280
-          },
+          audio: false
 
-          height: {
-            ideal: 720
-          }
-
-        },
-
-        audio: false
-
-      });
+        });
 
 
     const video =
-      document.getElementById("video");
+      document.getElementById(
+        "video"
+      );
 
 
     video.srcObject =
@@ -709,11 +1303,12 @@ async function startCamera() {
     await video.play();
 
 
-    scanning = true;
+    scanning =
+      true;
 
 
     showCameraStatus(
-      "CAMERA ACTIVE.\n\nPoint the rear camera at the student's QR code.",
+      "CAMERA ACTIVE.\n\nScan students continuously.",
       false,
       true
     );
@@ -725,7 +1320,6 @@ async function startCamera() {
   } catch (error) {
 
     console.error(
-      "CAMERA ERROR:",
       error
     );
 
@@ -733,73 +1327,10 @@ async function startCamera() {
     stopCamera(false);
 
 
-    const errorName =
-      error && error.name
-        ? error.name
-        : "";
-
-
-    if (
-      errorName === "NotAllowedError" ||
-      errorName === "PermissionDeniedError"
-    ) {
-
-      showCameraStatus(
-        "CAMERA PERMISSION DENIED.\n\nPlease allow Camera permission for this GitHub Pages website in Chrome, then reload the page and try again.",
-        true,
-        false
-      );
-
-      return;
-    }
-
-
-    if (
-      errorName === "NotFoundError"
-    ) {
-
-      showCameraStatus(
-        "NO CAMERA FOUND.\n\nPlease check the phone camera.",
-        true,
-        false
-      );
-
-      return;
-    }
-
-
-    if (
-      errorName === "NotReadableError"
-    ) {
-
-      showCameraStatus(
-        "CAMERA IS ALREADY IN USE.\n\nClose other apps using the camera and try again.",
-        true,
-        false
-      );
-
-      return;
-    }
-
-
     showCameraStatus(
 
-      "UNABLE TO START CAMERA.\n\n" +
-
-      "Error: " +
-
-      (
-        errorName ||
-        "Unknown camera error"
-      ) +
-
-      "\n\n" +
-
-      (
-        error && error.message
-          ? error.message
-          : ""
-      ),
+      "Unable to start camera.\n\n" +
+      error.message,
 
       true,
 
@@ -808,42 +1339,58 @@ async function startCamera() {
     );
 
   }
+
 }
 
 
-/* =====================================================
-   STOP CAMERA
-   ===================================================== */
+/*******************************************************
+ * STOP CAMERA
+ *******************************************************/
 
-function stopCamera(showMessage) {
+function stopCamera(
+  showMessage
+) {
 
-  scanning = false;
+  scanning =
+    false;
 
 
   if (stream) {
 
     stream
       .getTracks()
-      .forEach(function(track) {
+      .forEach(
+        function(track) {
 
-        track.stop();
+          track.stop();
 
-      });
+        }
+      );
 
-    stream = null;
+
+    stream =
+      null;
+
   }
 
 
   const video =
-    document.getElementById("video");
+    document.getElementById(
+      "video"
+    );
 
 
   if (video) {
-    video.srcObject = null;
+
+    video.srcObject =
+      null;
+
   }
 
 
-  if (showMessage !== false) {
+  if (
+    showMessage !== false
+  ) {
 
     showCameraStatus(
       "Camera stopped.",
@@ -852,84 +1399,113 @@ function stopCamera(showMessage) {
     );
 
   }
+
 }
 
 
-/* =====================================================
-   START BUTTON
-   ===================================================== */
+/*******************************************************
+ * BUTTONS
+ *******************************************************/
 
 document
-  .getElementById("startButton")
+  .getElementById(
+    "startButton"
+  )
   .addEventListener(
     "click",
     startCamera
   );
 
 
-/* =====================================================
-   STOP BUTTON
-   ===================================================== */
-
 document
-  .getElementById("stopButton")
+  .getElementById(
+    "stopButton"
+  )
   .addEventListener(
     "click",
     function() {
-      stopCamera(true);
+
+      stopCamera(
+        true
+      );
+
     }
   );
 
 
-/* =====================================================
-   QR SCAN LOOP
-   ===================================================== */
+/*******************************************************
+ * QR SCAN LOOP
+ *******************************************************/
 
 async function scanLoop() {
 
   if (!scanning) {
+
     return;
+
   }
 
 
-  const video =
-    document.getElementById("video");
-
-
   if (
-    video.readyState >= 2 &&
+    !detecting &&
     detector
   ) {
 
-    try {
-
-      const barcodes =
-        await detector.detect(video);
-
-
-      if (
-        barcodes &&
-        barcodes.length > 0
-      ) {
-
-        const rawValue =
-          barcodes[0].rawValue;
+    const video =
+      document.getElementById(
+        "video"
+      );
 
 
-        if (rawValue) {
+    if (
+      video.readyState >= 2
+    ) {
 
-          processQr(rawValue);
+      detecting =
+        true;
+
+
+      try {
+
+        const barcodes =
+          await detector.detect(
+            video
+          );
+
+
+        if (
+          barcodes &&
+          barcodes.length
+        ) {
+
+          const rawValue =
+            barcodes[0]
+              .rawValue;
+
+
+          if (rawValue) {
+
+            processQr(
+              rawValue
+            );
+
+          }
 
         }
 
+
+      } catch (error) {
+
+        console.log(
+          "QR detection:",
+          error
+        );
+
       }
 
-    } catch (error) {
 
-      console.error(
-        "QR DETECTION ERROR:",
-        error
-      );
+      detecting =
+        false;
 
     }
 
@@ -938,99 +1514,129 @@ async function scanLoop() {
 
   if (scanning) {
 
-    requestAnimationFrame(
-      scanLoop
+    setTimeout(
+      function() {
+
+        requestAnimationFrame(
+          scanLoop
+        );
+
+      },
+      70
     );
 
   }
+
 }
 
 
-/* =====================================================
-   PROCESS QR
-   ===================================================== */
+/*******************************************************
+ * PROCESS QR
+ *******************************************************/
 
-function processQr(rawValue) {
+function processQr(
+  rawValue
+) {
+
+  const studentId =
+    extractStudentId(
+      rawValue
+    );
+
+
+  if (!studentId) {
+
+    return;
+
+  }
+
 
   const now =
     Date.now();
 
 
   /*
-   * Prevent the same QR from being
-   * processed repeatedly within 3 seconds.
+   * Same student cooldown:
+   * prevents accidental duplicate
+   * scans while QR remains in camera.
    */
 
+  const previous =
+    recentScans.get(
+      studentId
+    );
+
+
   if (
-    rawValue === lastScannedId &&
-    now - lastScanTime < 3000
+    previous &&
+    now - previous < 1800
   ) {
 
     return;
+
   }
 
 
-  lastScannedId =
-    rawValue;
+  /*
+   * Prevent same student from
+   * being sent twice simultaneously.
+   */
 
-  lastScanTime =
-    now;
-
-
-  const studentId =
-    extractStudentId(rawValue);
-
-
-  if (!studentId) {
-
-    showCameraStatus(
-      "INVALID QR CODE.\n\nThis QR does not contain a valid Student ID.",
-      true,
-      false
-    );
+  if (
+    processingStudents.has(
+      studentId
+    )
+  ) {
 
     return;
+
   }
 
 
-  showCameraStatus(
-
-    "QR DETECTED.\n\n" +
-
-    "Student ID: " +
-
-    studentId +
-
-    "\n\nRecording attendance...",
-
-    false,
-
-    false
-
+  recentScans.set(
+    studentId,
+    now
   );
 
 
-  recordAttendance(studentId);
+  processingStudents.add(
+    studentId
+  );
+
+
+  showCameraStatus(
+    "QR DETECTED\n\nStudent ID: " +
+    studentId +
+    "\n\nRecording attendance...",
+    false,
+    false
+  );
+
+
+  recordAttendance(
+    studentId
+  )
+
+  .finally(
+    function() {
+
+      processingStudents.delete(
+        studentId
+      );
+
+    }
+  );
+
 }
 
 
-/* =====================================================
-   RECORD ATTENDANCE
-   ===================================================== */
+/*******************************************************
+ * RECORD ATTENDANCE
+ *******************************************************/
 
-async function recordAttendance(studentId) {
-
-  if (!sessionToken) {
-
-    showCameraStatus(
-      "Scanner session is missing.\n\nPlease verify the device again.",
-      true,
-      false
-    );
-
-    return;
-  }
-
+async function recordAttendance(
+  studentId
+) {
 
   try {
 
@@ -1039,17 +1645,13 @@ async function recordAttendance(studentId) {
 
         api: "record",
 
-        student: studentId,
+        student:
+          studentId,
 
-        token: sessionToken
+        token:
+          sessionToken
 
       });
-
-
-    console.log(
-      "ATTENDANCE RESPONSE:",
-      response
-    );
 
 
     if (
@@ -1057,16 +1659,34 @@ async function recordAttendance(studentId) {
       response.success
     ) {
 
+      scanCount++;
+
+
+      document
+        .getElementById(
+          "scanCount"
+        )
+        .textContent =
+          "Scanned: " +
+          scanCount;
+
+
+      showStudentResult(
+        response
+      );
+
+
       showCameraStatus(
 
         response.message ||
-        "Attendance recorded successfully.",
+        "Attendance recorded.",
 
         false,
 
         true
 
       );
+
 
     } else {
 
@@ -1075,7 +1695,7 @@ async function recordAttendance(studentId) {
         response &&
         response.message
           ? response.message
-          : "Attendance could not be recorded.",
+          : "Attendance failed.",
 
         true,
 
@@ -1085,24 +1705,13 @@ async function recordAttendance(studentId) {
 
     }
 
+
   } catch (error) {
-
-    console.error(
-      "ATTENDANCE ERROR:",
-      error
-    );
-
 
     showCameraStatus(
 
       "Attendance server error.\n\n" +
-
-      (
-        error &&
-        error.message
-          ? error.message
-          : "Unable to contact attendance server."
-      ),
+      error.message,
 
       true,
 
@@ -1111,33 +1720,295 @@ async function recordAttendance(studentId) {
     );
 
   }
+
 }
 
 
-/* =====================================================
-   EXTRACT STUDENT ID
-   ===================================================== */
+/*******************************************************
+ * SHOW STUDENT RESULT
+ *******************************************************/
 
-function extractStudentId(rawValue) {
+function showStudentResult(
+  response
+) {
 
-  const value =
-    String(rawValue || "").trim();
+  const student =
+    response.student;
+
+
+  const attendance =
+    response.attendance;
+
+
+  if (!student) {
+
+    return;
+
+  }
+
+
+  const card =
+    document.getElementById(
+      "studentCard"
+    );
+
+
+  card.style.display =
+    "block";
+
+
+  document
+    .getElementById(
+      "studentName"
+    )
+    .textContent =
+      student.name ||
+      "-";
+
+
+  document
+    .getElementById(
+      "studentId"
+    )
+    .textContent =
+      "Student ID: " +
+      (
+        student.studentId ||
+        "-"
+      );
+
+
+  const details =
+    document.getElementById(
+      "studentDetails"
+    );
+
+
+  details.innerHTML =
+
+    detail(
+      "Course",
+      student.course
+    ) +
+
+    detail(
+      "Year",
+      student.year
+    ) +
+
+    detail(
+      "Batch",
+      student.batch
+    ) +
+
+    detail(
+      "Mobile",
+      student.mobile
+    ) +
+
+    detail(
+      "Parent / Guardian",
+      student.parentName
+    ) +
+
+    detail(
+      "Parent Mobile",
+      student.parentMobile
+    ) +
+
+    detail(
+      "DOB",
+      student.dob
+    ) +
+
+    detail(
+      "Gender",
+      student.gender
+    ) +
+
+    detail(
+      "Status",
+      student.status
+    );
+
+
+  document
+    .getElementById(
+      "attendanceAction"
+    )
+    .textContent =
+      actionText(
+        response.action
+      );
+
+
+  document
+    .getElementById(
+      "resultDate"
+    )
+    .textContent =
+      attendance.date ||
+      "-";
+
+
+  document
+    .getElementById(
+      "resultIn"
+    )
+    .textContent =
+      attendance.inTime ||
+      "-";
+
+
+  document
+    .getElementById(
+      "resultOut"
+    )
+    .textContent =
+      attendance.outTime ||
+      "-";
+
+
+  document
+    .getElementById(
+      "resultDuration"
+    )
+    .textContent =
+      attendance.duration ||
+      "-";
+
+
+  document
+    .getElementById(
+      "resultStatus"
+    )
+    .textContent =
+      attendance.status ||
+      "-";
+
+
+  document
+    .getElementById(
+      "resultLate"
+    )
+    .textContent =
+      attendance.late ||
+      "No";
 
 
   /*
-   * CASE 1:
-   * QR contains the full existing
-   * Student Profile URL.
+   * Keep latest result visible,
+   * while camera continues running.
+   */
+
+  card.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+
+}
+
+
+/*******************************************************
+ * DETAIL HTML
+ *******************************************************/
+
+function detail(
+  label,
+  value
+) {
+
+  return `
+
+    <div class="detail">
+
+      <div class="detail-label">
+        ${escapeHtml(label)}
+      </div>
+
+      <div class="detail-value">
+        ${escapeHtml(
+          value || "-"
+        )}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/*******************************************************
+ * ACTION TEXT
+ *******************************************************/
+
+function actionText(
+  action
+) {
+
+  if (
+    action === "IN"
+  ) {
+
+    return "✓ IN RECORDED";
+
+  }
+
+
+  if (
+    action === "OUT"
+  ) {
+
+    return "✓ OUT RECORDED";
+
+  }
+
+
+  if (
+    action === "NO_CHANGE"
+  ) {
+
+    return "✓ ALREADY COMPLETED";
+
+  }
+
+
+  return "✓ ATTENDANCE UPDATED";
+
+}
+
+
+/*******************************************************
+ * EXTRACT STUDENT ID
+ *******************************************************/
+
+function extractStudentId(
+  rawValue
+) {
+
+  const value =
+    String(
+      rawValue || ""
+    ).trim();
+
+
+  /*
+   * Existing profile URL
    */
 
   try {
 
     const url =
-      new URL(value);
+      new URL(
+        value
+      );
 
 
     const id =
-      url.searchParams.get("id");
+      url.searchParams.get(
+        "id"
+      );
 
 
     if (id) {
@@ -1148,19 +2019,11 @@ function extractStudentId(rawValue) {
 
     }
 
-  } catch (error) {
-
-    /*
-     * Not a URL.
-     * Continue below.
-     */
-
-  }
+  } catch (error) {}
 
 
   /*
-   * CASE 2:
-   * Find RC######## anywhere.
+   * RC########
    */
 
   const match =
@@ -1177,25 +2040,52 @@ function extractStudentId(rawValue) {
   }
 
 
-  /*
-   * CASE 3:
-   * Plain Student ID.
-   */
-
-  if (
-    /^RC\d{8}$/i.test(value)
-  ) {
-
-    return value
-      .toUpperCase();
-
-  }
-
-
   return "";
+
+}
+
+
+/*******************************************************
+ * HTML ESCAPE
+ *******************************************************/
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value || ""
+  )
+
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+
+  .replace(
+    /</g,
+    "&lt;"
+  )
+
+  .replace(
+    />/g,
+    "&gt;"
+  )
+
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
 }
 
 </script>
 
 </body>
+
 </html>
